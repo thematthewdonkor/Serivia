@@ -1,27 +1,8 @@
-import {
-  Home,
-  Heart,
-  Clock,
-  TrendingUp,
-  Settings,
-  HelpCircle,
-  Play,
-} from "lucide-react";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { Progress } from "./ui/progress";
+import { Youtube } from "lucide-react";
 
-const sidebarRoutes = [
-  { icon: Home, label: "Home", url: "/", active: true },
-  { icon: Heart, label: "Favorites", url: "/favorite" },
-  { icon: Clock, label: "Coming soon", url: "/comingsoon" },
-  { icon: TrendingUp, label: "Trending", url: "/trending" },
-];
-
-const bottomRoutes = [
-  { icon: Settings, label: "Settings", url: "/settings" },
-  { icon: HelpCircle, label: "Support", url: "/help" },
-];
+import { SidebarRoutes } from "./sidebar-route";
 
 const continueWatching = [
   {
@@ -34,59 +15,31 @@ const continueWatching = [
 
 export const Sidebar = () => {
   return (
-    <aside className="hidden md:flex w-80 bg-slate-800/30 p-6 flex-col">
-      <nav className="space-y-2">
-        {sidebarRoutes.map((route) => (
-          <Link
-            href={route.url}
-            key={route.label}
-            className={cn(
-              "w-full flex items-center justify-start text-gray-300 hover:text-white hover:bg-slate-700/50 p-2 rounded-lg transition duration-200",
-              route.active && "bg-slate-700/50 text-white"
-            )}
-          >
-            <route.icon className="w-5 h-5 mr-3" />
-            {route.label}
-          </Link>
-        ))}
-      </nav>
+    <aside className="hidden md:flex w-80 bg-slate-800/30 p-6 flex-col min-h-screen text-gray-300">
+      <SidebarRoutes />
 
-      <div className="mt-8 space-y-2">
-        {bottomRoutes.map((route) => (
-          <Link
-            href={route.url}
-            key={route.label}
-            className="w-full flex items-center justify-start text-gray-300 hover:text-white hover:bg-slate-700/50 p-2 rounded-lg transition duration-200"
-          >
-            <route.icon className="w-5 h-5 mr-3" />
-            {route.label}
-          </Link>
-        ))}
-      </div>
-
-      <div className="mt-8 flex-1">
+      <div className="flex-1">
         <div className="flex items-center gap-2 mb-4">
-          <Play className="w-5 h-5 text-white" />
+          <Youtube className="w-5 h-5 text-white" />
           <span className="text-white font-medium">Continue Watching</span>
         </div>
-
-        <div className="space-y-3">
+        <div className="space-y-1">
           {continueWatching.map((item) => (
             <div key={item.title}>
               <div className="relative group cursor-pointer">
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  fill
-                  className="w-full h-24 object-cover"
-                />
+                <div className="relative h-24 overflow-hidden">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    className="object-cover rounded-lg"
+                  />
+                </div>
+
                 <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors" />
 
-                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-600">
-                  <div
-                    className="h-full bg-white"
-                    style={{ width: `${item.progress}%` }}
-                  />
+                <div className="absolute bottom-0 left-0 right-0">
+                  <Progress value={item.progress} className="bg-white" />
                 </div>
 
                 <div className="absolute top-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">
@@ -97,7 +50,10 @@ export const Sidebar = () => {
                   {item.progress}%
                 </div>
               </div>
-              <h4>Title</h4>
+
+              <h4 className="text-sm text-white line-clamp-1 mt-2">
+                {item.title}
+              </h4>
             </div>
           ))}
         </div>
