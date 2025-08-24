@@ -1,4 +1,3 @@
-import { Navbar } from "@/components/navbar";
 import { Sidebar } from "@/components/sidebar";
 import { Header } from "@/components/header";
 import { HeroSection } from "@/components/hero-section";

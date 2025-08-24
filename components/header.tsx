@@ -1,55 +1,112 @@
+"use client";
+
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "./ui/button";
 import { Menu, Search } from "lucide-react";
-
 import { SidebarRoutes } from "./sidebar-route";
 import Image from "next/image";
 import { Input } from "./ui/input";
 import { AuthModal } from "./auth-modal";
 
+import { useUser } from "@/hooks/useUser";
+import { createClient } from "@/utils/supabase/client";
+
 export const Header = () => {
+  const user = useUser();
+  const supabase = createClient();
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+  };
+
   return (
-    <header className="flex items-center justify-between p-4 md:p-6 bg-slate-800/50">
-      {/* Logo */}
-      <div className="flex items-center gap-2">
-        <Image src="/logo.png" alt="Logo" width={40} height={40} />
-        <span className="text-lg md:text-xl font-semibold">Serivia</span>
-      </div>
+    <header className="flex items-center justify-between p-4 md:p-6 bg-slate-800/50 border-b border-slate-700/50">
+      <div className="flex items-center justify-between w-full gap-4 md:gap-6">
+        {/* Mobile Menu */}
+        <div className="flex items-center gap-3">
+          <div className="md:hidden">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="text-white hover:bg-slate-700/50 hover:text-white p-2"
+                >
+                  <Menu className="w-5 h-5" />
+                  <span className="sr-only">Open menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent
+                side="left"
+                className="bg-slate-900 w-80 text-white p-6 border-slate-700"
+              >
+                <SidebarRoutes />
+              </SheetContent>
+            </Sheet>
+          </div>
 
-      <div className="flex-1 flex items-center justify-between gap-4 md:gap-6">
-        <Sheet>
-          <SheetTrigger>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden text-white hover:bg-slate-700 transition-colors duration-200 hover:text-white"
-            >
-              <Menu className="w-4 h-4" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent
-            side="left"
-            className="bg-slate-900 w-80 text-white z-60 p-6"
-          >
-            <SidebarRoutes />
-          </SheetContent>
-        </Sheet>
+          {/* Logo */}
+          <div className=" hidden md:flex items-center gap-2">
+            <Image
+              src="/logo.png"
+              alt="Serivia Logo"
+              width={40}
+              height={40}
+              className="rounded-md"
+            />
+            <span className="text-lg md:text-xl font-semibold text-white">
+              Serivia
+            </span>
+          </div>
+        </div>
 
-        {/* Search */}
-        <div className="flex-1 max-w-lg mx-4 md:mx-8">
-          <div className="relative">
+        <div className=" sm:flex flex-1 max-w-md mx-4 md:mx-8">
+          <div className="relative w-full">
             <Search className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <Input
-              placeholder="Movies, series, shows..."
-              className="pl-10 text-white border-slate-600 bg-slate-700/50 placeholder:text-gray-400 text-sm md:text-base"
+              placeholder="Search movies, series, shows..."
+              className="pl-10 text-white border-slate-600 bg-slate-700/50 placeholder:text-gray-400 text-sm md:text-base focus:border-slate-500 focus:ring-1 focus:ring-slate-500"
             />
           </div>
         </div>
 
-        <div className="">
-          <AuthModal>
-            <Button>Login</Button>
-          </AuthModal>
+        <div className="flex-shrink-0">
+          {!user ? (
+            <AuthModal>
+              <Button
+                size="default"
+                className="text-white bg-slate-700/50 hover:bg-slate-600/50 text-sm md:text-base border border-slate-600 hover:border-slate-500 transition-colors"
+              >
+                <span className="hidden sm:inline">Get Started</span>
+                <span className="sm:hidden">Login</span>
+              </Button>
+            </AuthModal>
+          ) : (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Avatar className="w-9 h-9 cursor-pointer">
+                  <AvatarImage src={user.user_metadata.avatar_url || ""} />
+                  <AvatarFallback>
+                    {user?.email?.charAt(0).toUpperCase() || "U"}
+                  </AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-10 bg-slate-800 text-white border-slate-600">
+                <DropdownMenuItem onClick={handleLogout}>
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </div>
     </header>

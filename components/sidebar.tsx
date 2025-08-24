@@ -15,14 +15,19 @@ const continueWatching = [
 
 export const Sidebar = () => {
   return (
-    <aside className="hidden md:flex w-80 bg-slate-800/30 p-6 flex-col min-h-screen text-gray-300">
+    <aside className="hidden md:flex w-80 bg-slate-800/50 backdrop-blur-sm border-r border-slate-700/50 p-6 flex-col min-h-screen text-gray-300">
       <SidebarRoutes />
 
       <div className="flex-1">
-        <div className="flex items-center gap-2 mb-4">
-          <Youtube className="w-5 h-5 text-white" />
-          <span className="text-white font-medium">Continue Watching</span>
+        <div className="flex items-center gap-2 mb-6">
+          <div className="flex items-center justify-center w-8 h-8 bg-slate-700/50 rounded-lg">
+            <Youtube className="w-4 h-4 text-white" />
+          </div>
+          <span className="text-white font-semibold text-lg">
+            Continue Watching
+          </span>
         </div>
+
         <div className="space-y-1">
           {continueWatching.map((item) => (
             <div key={item.title}>
