@@ -15,7 +15,7 @@ const continueWatching = [
 
 export const Sidebar = () => {
   return (
-    <aside className="hidden md:flex w-80 bg-slate-800/50 backdrop-blur-sm border-r border-slate-700/50 p-6 flex-col min-h-screen text-gray-300">
+    <aside className="hidden md:flex w-80 bg-slate-800/30  border-slate-700/50 p-6 flex-col min-h-screen text-gray-300">
       <SidebarRoutes />
 
       <div className="flex-1">

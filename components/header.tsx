@@ -5,8 +5,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -29,25 +27,18 @@ export const Header = () => {
   };
 
   return (
-    <header className="flex items-center justify-between p-4 md:p-6 bg-slate-800/50 border-b border-slate-700/50">
+    <header className="flex items-center justify-between p-4 md:p-6 bg-slate-800/30">
       <div className="flex items-center justify-between w-full gap-4 md:gap-6">
         {/* Mobile Menu */}
         <div className="flex items-center gap-3">
           <div className="md:hidden">
             <Sheet>
               <SheetTrigger asChild>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  className="text-white hover:bg-slate-700/50 hover:text-white p-2"
-                >
-                  <Menu className="w-5 h-5" />
-                  <span className="sr-only">Open menu</span>
-                </Button>
+                <Menu className="text-gray-300" />
               </SheetTrigger>
               <SheetContent
                 side="left"
-                className="bg-slate-900 w-80 text-white p-6 border-slate-700"
+                className="bg-slate-800 w-80 border-slate-700 text-white p-6"
               >
                 <SidebarRoutes />
               </SheetContent>
@@ -84,7 +75,7 @@ export const Header = () => {
             <AuthModal>
               <Button
                 size="default"
-                className="text-white bg-slate-700/50 hover:bg-slate-600/50 text-sm md:text-base border border-slate-600 hover:border-slate-500 transition-colors"
+                className="text-white bg-slate-800/30 hover:bg-slate-600/50 text-sm md:text-base transition-colors"
               >
                 <span className="hidden sm:inline">Get Started</span>
                 <span className="sm:hidden">Login</span>
