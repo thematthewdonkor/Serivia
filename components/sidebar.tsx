@@ -19,15 +19,15 @@ export const Sidebar = () => {
       <SidebarRoutes />
 
       <div className="flex-1">
-        <div className="flex items-center gap-2 mb-6">
+        {/* <div className="flex items-center gap-2 mb-6">
           <div className="flex items-center justify-center w-8 h-8 bg-slate-700/50 rounded-lg">
             <Youtube className="w-4 h-4 text-white" />
           </div>
           <span className="text-white font-semibold text-lg">
             Continue Watching
           </span>
-        </div>
-
+        </div> */}
+        {/* 
         <div className="space-y-1">
           {continueWatching.map((item) => (
             <div key={item.title}>
@@ -61,7 +61,7 @@ export const Sidebar = () => {
               </h4>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
     </aside>
   );

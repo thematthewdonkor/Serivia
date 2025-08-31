@@ -5,7 +5,6 @@ import { createClient } from "@/utils/supabase/client";
 import {
   Dialog,
   DialogContent,
-  DialogTrigger,
   DialogHeader,
   DialogTitle,
   DialogDescription,
@@ -13,7 +12,7 @@ import {
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 
-export const AuthModal = ({ children }: { children: React.ReactNode }) => {
+export const AuthModal = () => {
   const { isOpen, onOpen, onClose } = useLoginModal();
   const supabase = createClient();
   const redirect = process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL;
@@ -23,9 +22,6 @@ export const AuthModal = ({ children }: { children: React.ReactNode }) => {
       open={isOpen}
       onOpenChange={(open) => (open ? onOpen() : onClose())}
     >
-      <DialogTrigger asChild onClick={onOpen}>
-        {children}
-      </DialogTrigger>
       <DialogContent className="sm:max-w-md bg-slate-800 backdrop-blur-sm border-slate-600 text-white">
         <DialogHeader>
           <DialogTitle>Welcome</DialogTitle>

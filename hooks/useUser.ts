@@ -3,7 +3,7 @@ import { createClient } from "@/utils/supabase/client";
 import type { User } from "@supabase/supabase-js";
 
 export const useUser = () => {
-  const [user, setUser] = useState<null | User>(null);
+  const [user, setUser] = useState<User | null>(null);
   const supabase = createClient();
 
   useEffect(() => {

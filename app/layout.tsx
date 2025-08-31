@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
-import { ToastProvider } from "@/components/toast-provider";
+import { AuthModal } from "@/components/modal/auth-modal";
+import { MovieModal } from "@/components/modal/movie-modal";
 
 import "./globals.css";
 
@@ -23,8 +24,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={` ${poppins.variable} antialiased`}>
+        <AuthModal />
+        <MovieModal />
         {children}
-        <ToastProvider />
       </body>
     </html>
   );

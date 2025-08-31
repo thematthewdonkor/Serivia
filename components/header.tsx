@@ -1,5 +1,7 @@
 "use client";
 
+import qs from "query-string";
+
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import {
   DropdownMenu,
@@ -13,18 +15,76 @@ import { Menu, Search } from "lucide-react";
 import { SidebarRoutes } from "./sidebar-route";
 import Image from "next/image";
 import { Input } from "./ui/input";
-import { AuthModal } from "./auth-modal";
+import { useCallback, useState } from "react";
 
 import { useUser } from "@/hooks/useUser";
 import { createClient } from "@/utils/supabase/client";
+import { useLoginModal } from "@/hooks/useLoginModal";
+
+import { getSearchMovies } from "@/actions/getSearchMovies";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export const Header = () => {
   const user = useUser();
   const supabase = createClient();
+  const params = useSearchParams();
+  const [value, setValue] = useState("");
+  const router = useRouter();
+  const { onOpen } = useLoginModal();
 
+  //Handle logout
   const handleLogout = async () => {
     await supabase.auth.signOut();
   };
+
+  //Handle search
+  const handleSearch = useCallback(
+    async (query: string) => {
+      try {
+        let currentQuery = {};
+
+        await getSearchMovies(query);
+
+        if (params) {
+          currentQuery = qs.parse(params.toString());
+        }
+
+        const updatedQuery: Record<string, string | undefined> = {
+          ...currentQuery,
+          query: value,
+        };
+
+        if (params?.get("query") === value) {
+          delete updatedQuery.value;
+
+          setValue("");
+        }
+
+        //Explore this later with getSearchMovies vs getPopularMovies function
+        const url = qs.stringifyUrl({
+          url: "/",
+          query: updatedQuery,
+        });
+
+        router.push(url);
+      } catch (error) {
+        console.error("Search failed:", error);
+      }
+    },
+    [params, router, value]
+  );
+
+  //Prevent api calls on every keystroke so that you don't spam it
+  useEffect(() => {
+    if (!value) return;
+
+    const timeout = setTimeout(() => {
+      handleSearch(value);
+    }, 500);
+
+    return () => clearTimeout(timeout);
+  }, [value, handleSearch]);
 
   return (
     <header className="flex items-center justify-between p-4 md:p-6 bg-slate-800/30">
@@ -45,7 +105,7 @@ export const Header = () => {
             </Sheet>
           </div>
 
-          {/* Logo */}
+          {/*Header image or hero section */}
           <div className=" hidden md:flex items-center gap-2">
             <Image
               src="/logo.png"
@@ -60,27 +120,30 @@ export const Header = () => {
           </div>
         </div>
 
+        {/* Search input field */}
         <div className=" sm:flex flex-1 max-w-md mx-4 md:mx-8">
           <div className="relative w-full">
             <Search className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <Input
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
               placeholder="Search movies, series, shows..."
               className="pl-10 text-white border-slate-600 bg-slate-700/50 placeholder:text-gray-400 text-sm md:text-base focus:border-slate-500 focus:ring-1 focus:ring-slate-500"
             />
           </div>
         </div>
 
+        {/*Toggle open */}
         <div className="flex-shrink-0">
           {!user ? (
-            <AuthModal>
-              <Button
-                size="default"
-                className="text-white bg-slate-800/30 hover:bg-slate-600/50 text-sm md:text-base transition-colors"
-              >
-                <span className="hidden sm:inline">Get Started</span>
-                <span className="sm:hidden">Login</span>
-              </Button>
-            </AuthModal>
+            <Button
+              onClick={() => onOpen()}
+              size="default"
+              className="text-white bg-slate-800/30 hover:bg-slate-600/50 text-sm md:text-base transition-colors"
+            >
+              <span className="hidden sm:inline">Get Started</span>
+              <span className="sm:hidden">Login</span>
+            </Button>
           ) : (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

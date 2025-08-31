@@ -1,83 +1,93 @@
 "use client";
 
-import { useCallback, useState } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import qs from "query-string";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "./ui/button";
+import { getMoviesGenres } from "@/actions/getMoviesGenres";
+import { useSearchParams, useRouter } from "next/navigation";
 
-const genres = [
-  "Adventure",
-  "Action",
-  "Drama",
-  "Fantasy",
-  "Animation",
-  "Documentary",
-  "Horror",
-  "History",
-  "Music",
-  "Romance",
-  "Mystery",
-  "Science Fiction",
-  "Thriller",
-  "Western",
-  "Comedy",
-  "Crime",
-  "War",
-];
+import qs from "query-string";
 
-export const GenreFilter = () => {
-  const [activeGenre, setActiveGenre] = useState("");
+interface GenreFilterProps {
+  onGenreSelect: (id: number, name: string) => void;
+}
 
-  console.log(activeGenre);
-  const params = useSearchParams();
+interface Genres {
+  id: number;
+  name: string;
+}
+
+export const GenreFilter = ({ onGenreSelect }: GenreFilterProps) => {
+  const [activeGenre, setActiveGenre] = useState<string>("");
+  const [genres, setGenres] = useState<Genres[]>([]);
+
+  const searchParams = useSearchParams();
   const router = useRouter();
 
-  //Handle CLick Function
-  const handleClick = (genre: string) => {
-    let currentQuery = {};
+  useEffect(() => {
+    try {
+      setGenres([]);
 
-    if (params) {
-      currentQuery = qs.parse(params.toString());
+      const fetchGenres = async () => {
+        const data = await getMoviesGenres();
+
+        setGenres(data);
+      };
+
+      fetchGenres();
+    } catch (error) {
+      console.log(error);
+    } finally {
     }
+  }, []);
 
-    const updatedQuery: any = {
-      ...currentQuery,
-      genres: genre,
-    };
+  //HANDLE CLICK FUNCTION
+  const handleClick = useCallback(
+    (id: number, name: string) => {
+      let currentQuery = {};
 
-    if (params?.get("genres") === genre) {
-      delete updatedQuery.genres;
+      if (searchParams) {
+        currentQuery = qs.parse(searchParams.toString());
+      }
 
-      setActiveGenre("");
-    } else {
-      setActiveGenre(genre);
-    }
+      //Update the query param with only the genre id
+      const updatedQuery: Record<string, string | undefined> = {
+        ...currentQuery,
+        genre: String(id),
+      };
 
-    const url = qs.stringifyUrl(
-      { url: "/", query: updatedQuery },
-      { skipNull: true }
-    );
+      delete updatedQuery.query;
 
-    router.push(url);
-  };
+      const url = qs.stringifyUrl({
+        url: "/",
+        query: updatedQuery,
+      });
+
+      router.push(url);
+      onGenreSelect(id, name);
+    },
+    [router, searchParams, onGenreSelect]
+  );
 
   return (
     <div className="flex items-center gap-2 md:gap-4 mb-4 md:mb-8 overflow-x-auto scroll-smooth scrollbar-hidden">
-      {genres.map((genre) => (
+      {genres.map(({ id, name }) => (
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => handleClick(genre)}
-          key={genre}
+          onClick={() => {
+            handleClick(id, name);
+            setActiveGenre(name);
+          }}
+          key={id}
           className={` 
-             hover:bg-white
-               text-gray-300 text-sm md:text-lg rounded-2xl font-normal
-              ${
-                activeGenre === genre &&
-                "bg-white hover:text-gray-900 text-gray-900"
-              }`}
+            hover:bg-white
+            text-gray-300 text-sm md:text-lg rounded-2xl font-normal
+            ${
+              activeGenre === name &&
+              "bg-white hover:text-gray-900 text-gray-900"
+            }`}
         >
-          {genre}
+          {name}
         </Button>
       ))}
     </div>

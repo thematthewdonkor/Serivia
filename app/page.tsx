@@ -1,8 +1,8 @@
 import { Sidebar } from "@/components/sidebar";
 import { Header } from "@/components/header";
 import { HeroSection } from "@/components/hero-section";
-import { GenreFilter } from "@/components/genre-filter";
 import { MovieCard } from "@/components/movie-card";
+// import { GenreFilter } from "@/components/genre-filter";
 
 export default function Home() {
   return (
@@ -14,7 +14,7 @@ export default function Home() {
           <main className="p-4 md:p-6">
             <HeroSection />
             <div className="mt-6 md:mt-8">
-              <GenreFilter />
+              {/* <GenreFilter /> */}
               <MovieCard />
             </div>
           </main>

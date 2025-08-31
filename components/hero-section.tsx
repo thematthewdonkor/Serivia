@@ -72,6 +72,8 @@ export const HeroSection = () => {
     fetchFeaturedMovie();
   }, []);
 
+  // if (!movie) return null;
+
   // VARIABLES
   const image = movie?.backdrop_path
     ? `https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`
