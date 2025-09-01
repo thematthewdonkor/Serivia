@@ -147,9 +147,9 @@ export const Header = () => {
           ) : (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Avatar className="w-9 h-9 cursor-pointer">
+                <Avatar className="w-9 h-9 cursor-pointer ">
                   <AvatarImage src={user.user_metadata.avatar_url || ""} />
-                  <AvatarFallback>
+                  <AvatarFallback className="text-gray-300 bg-slate-600">
                     {user?.email?.charAt(0).toUpperCase() || "U"}
                   </AvatarFallback>
                 </Avatar>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useLoginModal } from "@/hooks/useLoginModal";
 import { createClient } from "@/utils/supabase/client";
 import {
@@ -17,6 +18,18 @@ export const AuthModal = () => {
   const supabase = createClient();
   const redirect = process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL;
 
+  useEffect(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === "SIGNED_IN" && session) {
+        onClose();
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [onClose, supabase.auth]);
+
   return (
     <Dialog
       open={isOpen}
@@ -24,7 +37,7 @@ export const AuthModal = () => {
     >
       <DialogContent className="sm:max-w-md bg-slate-800 backdrop-blur-sm border-slate-600 text-white">
         <DialogHeader>
-          <DialogTitle>Welcome</DialogTitle>
+          <DialogTitle className="text-xl">Welcome👋</DialogTitle>
           <DialogDescription>
             Sign in to your account or create a new one to get started.
           </DialogDescription>
@@ -48,6 +61,7 @@ export const AuthModal = () => {
                   inputBorder: "#475569",
                   inputBorderFocus: "#64748b",
                   inputBorderHover: "#64748b",
+                  inputText: "#ffff",
                   anchorTextColor: "#60a5fa",
                   anchorTextHoverColor: "#93c5fd",
                 },

@@ -3,6 +3,8 @@ import { Poppins } from "next/font/google";
 import { AuthModal } from "@/components/modal/auth-modal";
 import { MovieModal } from "@/components/modal/movie-modal";
 
+import Footer from "@/components/footer";
+
 import "./globals.css";
 
 const poppins = Poppins({
@@ -27,6 +29,9 @@ export default function RootLayout({
         <AuthModal />
         <MovieModal />
         {children}
+        <div className="bg-slate-900">
+          <Footer />
+        </div>
       </body>
     </html>
   );

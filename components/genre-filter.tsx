@@ -8,7 +8,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import qs from "query-string";
 
 interface GenreFilterProps {
-  onGenreSelect: (id: number, name: string) => void;
+  handleClick: (id: number) => void;
 }
 
 interface Genres {
@@ -16,7 +16,7 @@ interface Genres {
   name: string;
 }
 
-export const GenreFilter = ({ onGenreSelect }: GenreFilterProps) => {
+export const GenreFilter = ({ handleClick }: GenreFilterProps) => {
   const [activeGenre, setActiveGenre] = useState<string>("");
   const [genres, setGenres] = useState<Genres[]>([]);
 
@@ -41,7 +41,7 @@ export const GenreFilter = ({ onGenreSelect }: GenreFilterProps) => {
   }, []);
 
   //HANDLE CLICK FUNCTION
-  const handleClick = useCallback(
+  const handleGenreClick = useCallback(
     (id: number, name: string) => {
       let currentQuery = {};
 
@@ -63,9 +63,10 @@ export const GenreFilter = ({ onGenreSelect }: GenreFilterProps) => {
       });
 
       router.push(url);
-      onGenreSelect(id, name);
+      handleClick(id);
+      setActiveGenre(name);
     },
-    [router, searchParams, onGenreSelect]
+    [router, searchParams, handleClick]
   );
 
   return (
@@ -75,8 +76,7 @@ export const GenreFilter = ({ onGenreSelect }: GenreFilterProps) => {
           variant="ghost"
           size="sm"
           onClick={() => {
-            handleClick(id, name);
-            setActiveGenre(name);
+            handleGenreClick(id, name);
           }}
           key={id}
           className={` 
