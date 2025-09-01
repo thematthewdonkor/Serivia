@@ -25,6 +25,8 @@ import { getSearchMovies } from "@/actions/getSearchMovies";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
+import { Suspense } from "react";
+
 export const Header = () => {
   const user = useUser();
   const supabase = createClient();
@@ -121,17 +123,20 @@ export const Header = () => {
         </div>
 
         {/* Search input field */}
-        <div className=" sm:flex flex-1 max-w-md mx-4 md:mx-8">
-          <div className="relative w-full">
-            <Search className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <Input
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              placeholder="Search movies, series, shows..."
-              className="pl-10 text-white border-slate-600 bg-slate-700/50 placeholder:text-gray-400 text-sm md:text-base focus:border-slate-500 focus:ring-1 focus:ring-slate-500"
-            />
+
+        <Suspense>
+          <div className=" sm:flex flex-1 max-w-md mx-4 md:mx-8">
+            <div className="relative w-full">
+              <Search className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Input
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                placeholder="Search movies, series, shows..."
+                className="pl-10 text-white border-slate-600 bg-slate-700/50 placeholder:text-gray-400 text-sm md:text-base focus:border-slate-500 focus:ring-1 focus:ring-slate-500"
+              />
+            </div>
           </div>
-        </div>
+        </Suspense>
 
         {/*Toggle open */}
         <div className="flex-shrink-0">
