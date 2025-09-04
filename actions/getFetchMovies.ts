@@ -3,7 +3,7 @@
 import axios from "axios";
 
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
-const TMDB_TOKEN = process.env.TMDB_ACCESS_TOKEN;
+// const TMDB_TOKEN = process.env.TMDB_ACCESS_TOKEN;
 
 export const fetchMovies = async (query: string) => {
   "use cache";
@@ -19,7 +19,7 @@ export const fetchMovies = async (query: string) => {
     const response = await axios.get(endpoint, {
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${TMDB_TOKEN}`,
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIzZTAxODk1MTVhY2QxYWRhNTlmYTFkZjAxM2E4ZmVhNCIsIm5iZiI6MTc1NDI2NTkzOS42NjYsInN1YiI6IjY4OGZmOTUzZTg1ZTkxNDM2ZWYzZTRkNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.MAZnPMwBzP9qq3tPMzgrvaf6f7NowXXkNZ15kHlRqQo`,
       },
     });
 
