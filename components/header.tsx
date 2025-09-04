@@ -26,10 +26,10 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export const Header = () => {
+  const [value, setValue] = useState("");
   const user = useUser();
   const supabase = createClient();
   const params = useSearchParams();
-  const [value, setValue] = useState("");
   const router = useRouter();
   const { onOpen } = useLoginModal();
 
