@@ -159,7 +159,7 @@ export const HeroSection = () => {
           <div className="absolute w-full bottom-3 px-4 md:px-6 flex justify-between items-center gap-4">
             <div className="flex items-center gap-4">
               <div className="bg-white/20 p-2 rounded-full">
-                <Play className="w-4 h-4 text-gray-100" />
+                {/* <Play className="w-4 h-4 text-gray-100" /> */}
               </div>
               {title && <p className="text-gray-300">{title}</p>}
             </div>
