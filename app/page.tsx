@@ -17,7 +17,9 @@ export default function Home() {
           <main className="p-4 md:p-6">
             <HeroSection />
             <div className="mt-6 md:mt-8 pb-4">
-              <MovieCard />
+              <Suspense>
+                <MovieCard />
+              </Suspense>
             </div>
           </main>
         </div>
