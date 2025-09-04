@@ -32,7 +32,6 @@ export const MovieCard = ({ onGenreMovieLoad }: MovieCardProps) => {
 
   const [movies, setMovies] = useState<Movie[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setIsError] = useState<string | null>(null);
 
   const { onOpen } = useMovieModal();
 
@@ -42,13 +41,11 @@ export const MovieCard = ({ onGenreMovieLoad }: MovieCardProps) => {
       try {
         setIsLoading(true);
         setMovies([]);
-
         const data = await fetchMovies(query);
         setMovies(data);
       } catch (error) {
         console.error("Failed to fetch movies", error);
         setMovies([]);
-        setIsError("Failed to search movies, Please try again");
       } finally {
         setIsLoading(false);
       }
@@ -61,7 +58,6 @@ export const MovieCard = ({ onGenreMovieLoad }: MovieCardProps) => {
   const handleClick = async (id: number) => {
     try {
       setIsLoading(true);
-      setIsError(null);
 
       const data = await getMoviesByGenres(id);
       setMovies(data || []);
@@ -76,7 +72,6 @@ export const MovieCard = ({ onGenreMovieLoad }: MovieCardProps) => {
     } catch (error) {
       console.error("Failed to fetch movies by genre", error);
       setMovies([]);
-      setIsError("Failed to load movies by genre");
     } finally {
       setIsLoading(false);
     }
